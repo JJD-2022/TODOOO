@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feedback.css">
+    <title>ToDooo - Feedback</title>
+</head>
+<body>
+    <header>
+        <div class="logo-title">
+            <a href="todo.html">
+                <img src="todo.png" alt="Logo" class="logo">
+            </a>
+        </div>
+        <nav class="nav-bar">
+            <ul>
+                <li><a href="todo.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
+                <li id="profile-option" style="display: none;"><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="feedback-container">
+        <form id="feedback-form">
+            <h2>Feedback!</h2>
+            <textarea id="feedback-input" name="feedback" placeholder="Enter your feedback here..." rows="8" required></textarea>
+            <button type="submit" id="submit-feedback-btn">Submit Feedback</button>
+        </form>
+    </div>
+    
+    <div class="change-bg-container">
+        <button id="change-bg-btn">Change Background</button>
+        <input type="file" id="bg-file-input" accept="image/*" style="display: none;">
+    </div>
+    
+    <footer>
+        &copy; 2024 ToDooo. All rights reserved.
+    </footer>
+
+    <script>
+        // Function to apply background color changes
+        function applyBackgroundColorChanges(r, g, b) {
+            const darkerColor = `rgb(${Math.max(r - 30, 0)}, ${Math.max(g - 30, 0)}, ${Math.max(b - 30, 0)})`;
+            const lightContainerColor = `rgb(${Math.min(r + 180, 255)}, ${Math.min(g + 180, 255)}, ${Math.min(b + 180, 255)})`;
+            const darkerTextColor = `rgb(${Math.max(r - 70, 0)}, ${Math.max(g - 70, 0)}, ${Math.max(b - 70, 0)})`;
+            const buttonColor = `rgb(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)})`;
+
+            document.querySelector('header').style.backgroundColor = darkerColor;
+            document.querySelector('footer').style.backgroundColor = darkerColor;
+            document.querySelector('header').style.opacity = '0.8';
+            document.querySelector('footer').style.opacity = '0.8';
+            document.querySelector('.feedback-container').style.backgroundColor = lightContainerColor;
+            document.querySelector('.feedback-container h2').style.color = darkerTextColor;
+            document.getElementById('submit-feedback-btn').style.backgroundColor = buttonColor;
+            document.getElementById('change-bg-btn').style.backgroundColor = buttonColor;
+        }
+
+        // Background Change Functionality
+        const changeBgBtn = document.getElementById('change-bg-btn');
+        const bgFileInput = document.getElementById('bg-file-input');
+
+        changeBgBtn.addEventListener('click', () => {
+            bgFileInput.click();
+        });
+
+        bgFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.backgroundImage = `url('${e.target.result}')`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        context.drawImage(img, 0, 0, 1, 1);
+
+                        const [r, g, b] = context.getImageData(0, 0, 1, 1).data;
+
+                        applyBackgroundColorChanges(r, g, b);
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        window.onload = function() {
+            const todoBgImage = localStorage.getItem('backgroundImage');
+            if (todoBgImage) {
+                document.body.style.backgroundImage = `url('${todoBgImage}')`;
+                document.body.style.backgroundSize = 'cover'; 
+                document.body.style.backgroundPosition = 'center'; 
+            }
+        };
+
+        // Handle feedback submission
+        document.getElementById('feedback-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const feedback = document.getElementById('feedback-input').value;
+
+            // Use Fetch API to send feedback to the server
+            fetch('http://localhost:3022/api/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ feedback: feedback }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Failed to submit feedback');
+                }
+            })
+            .then(data => {
+                alert(data); // Alert the response from the server
+                document.getElementById('feedback-input').value = ''; // Clear the input
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your feedback.');
+            });
+    </script>
+</body>
+</html>

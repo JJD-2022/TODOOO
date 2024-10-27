@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3019:3019"
+
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3020:3020"
+
+  server3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3021:3021"
+
+  server4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3022:3022"

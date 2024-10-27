@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h2>Feedback Form</h2>
+    <form id="feedback-form">
+        <input type="text" id="name" name="name" placeholder="Your Name" required>
+        <textarea id="feedback" name="feedback" rows="4" placeholder="Your Feedback" required></textarea>
+        <button type="submit">Submit Feedback</button>
+    </form>
+
+    <script>
+<script>
+    document.getElementById('feedback-form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent form submission
+        console.log('Form submitted'); // Log form submission
+
+        const name = document.getElementById('name').value;
+        const feedback = document.getElementById('feedback').value;
+        console.log('Name:', name, 'Feedback:', feedback); // Log input values
+
+        // Send feedback to the API
+        try {
+            const response = await fetch('http://localhost:3000/api/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, feedback: feedback }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            alert('Feedback submitted successfully: ' + result.message);
+        } catch (error) {
+            console.error('Error submitting feedback:', error);
+            alert('Failed to submit feedback');
+        }
+    });
+</script>
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDooo - Sign Up</title>
+    <link rel="stylesheet" href="signup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form action="http://localhost:3021/api/signup" method="post">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="input-group">
+                <label for="retype-password">Retype Password</label>
+                <input type="password" id="retype-password" name="retype_password" required>
+            </div>
+            <div class="button-group">
+                <button type="submit">Sign Up</button>
+            </div>
+            <div class="footer-links">
+                <p>Already have an account? <a href="login.html">Login here</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Check if the user is logged in
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            document.getElementById('profile-option').style.display = 'inline';
+            document.getElementById('login-option').style.display = 'none';
+        }
+
+        // Add event listener for form submission
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const retypePassword = document.getElementById('retype-password').value;
+
+            // Check if passwords match
+            if (password !== retypePassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            // Simulate sign-up success without server
+            alert('Sign up successful!');
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('email', email); // Store email if needed
+
+            // Redirect to main page (todo.html) after a short delay
+            setTimeout(() => {
+                window.location.href = "todo.html";
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

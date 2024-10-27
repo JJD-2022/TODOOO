@@ -1,0 +1,123 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Ensure full height */
+    display: flex;
+    flex-direction: column; /* Allow footer to be at the bottom */
+    background-color: #f8e9f3; /* Light pink background */
+    color: #333;
+}
+
+header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #ff4b8d; /* Pink Nav Bar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.logo-title {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 150px;
+    height: 60px;
+}
+
+.nav-bar ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-bar ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.nav-bar ul li a:hover {
+    color: #f4f4f4;
+}
+
+/* Feedback Container Styles */
+.feedback-container {
+    max-width: 600px; /* Wider container */
+    margin: 40px auto; /* Center the feedback container */
+    padding: 20px;
+    background-color: #ffeef8; /* Light pink container */
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align text */
+}
+
+.feedback-container h2 {
+    font-size: 28px; /* Larger heading */
+    color: #ff4b8d; /* Darker pink for the heading */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+#feedback-input {
+    width: 80%; /* Full width to match the container */
+    padding: 10px;
+    margin: 10px 0; /* Space between input elements */
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    resize: none; /* Prevent resizing */
+}
+
+#submit-feedback-btn {
+    padding: 10px 15px;
+    background-color: #ff4b8d; /* Button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%; /* Full width */
+}
+
+#submit-feedback-btn:hover {
+    background-color: #ff2469; /* Darker pink on hover */
+}
+
+
+
+#change-bg-btn {
+    padding: 10px 15px;
+    background-color: #ff4b8d; /* Same as Add Task button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: absolute; /* Position button absolutely */
+    top: 70px; /* Adjust this value to position it below the nav bar */
+    right: 20px; /* Adjust this value for desired right positioning */
+    z-index: 1000; /* Ensure it stays above other elements */
+	margin-top:45px;
+	margin-right:2px;
+}
+
+
+#change-bg-btn:hover {
+    background-color: #ff2469; /* Darker pink on hover */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 36px;
+    background-color: #ff4b8d; /* Same color as header */
+    color: white;
+    margin-top: auto; /* Push footer to the bottom */
+}

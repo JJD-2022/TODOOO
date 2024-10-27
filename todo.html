@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="todo.css">
+    <title>ToDooo - Home Page</title>
+</head>
+<body>
+    <header>
+        <div class="logo-title">
+            <a href="todo.html">
+                <img src="todo.png" alt="Logo" class="logo">
+            </a>
+        </div>
+        <nav class="nav-bar">
+            <ul>
+                <li><a href="todo.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
+                <li id="profile-option" style="display: none;"><a href="profile.html">Profile</a></li> <!-- Profile link hidden by default -->
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+		<form action="http://localhost:3019/post" method="post">
+        <div class="input-container" id="input-container">
+            <h2>Add Your Tasks</h2>
+            <input type="text" id="task-input" name="task" placeholder="What do you wanna do today?">
+            <button type="submit" id="add-task-btn">Add Task</button>
+        </div>
+		</form>
+        <div class="task-container" id="task-container">
+            <h2>Your Tasks</h2>
+            <ul id="task-list">
+                <!-- Task items will be added here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Added Change Background Button Here -->
+    <div class="change-bg-container">
+        <button id="change-bg-btn">Change Background</button>
+        <input type="file" id="bg-file-input" accept="image/*" style="display: none;">
+    </div>
+
+    <footer>
+        &copy; 2024 ToDooo. All rights reserved.
+    </footer>
+
+    <script>
+        // Check if the user is logged in
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            // Show the Profile option in the navbar
+            document.getElementById('profile-option').style.display = 'inline';
+            // Hide the Login option
+            document.querySelector('.nav-bar li:nth-child(2)').style.display = 'none'; // Hides the Login link
+        }
+
+        // Task Adding Functionality
+        const taskInput = document.getElementById('task-input');
+        const taskList = document.getElementById('task-list');
+
+        // Function to add a task
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText !== '') {
+                const listItem = document.createElement('li');
+                listItem.className = 'task-item';
+
+                // Create a checkbox
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'task-checkbox';
+
+                // Task content
+                const taskContent = document.createElement('span');
+                taskContent.textContent = taskText;
+                listItem.appendChild(checkbox);
+                listItem.appendChild(taskContent);
+
+                // Strike-through and hide checkbox on check
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        taskContent.style.textDecoration = 'line-through';
+                        this.style.display = 'none'; // Hide the checkbox
+                    }
+                });
+
+                // Delete button
+                const deleteBtn = document.createElement("button");
+                deleteBtn.classList.add("delete-btn");
+                deleteBtn.innerHTML = "🗑️";
+
+                deleteBtn.addEventListener('click', function() {
+                    taskList.removeChild(listItem);
+                });
+
+                listItem.appendChild(deleteBtn);
+                taskList.appendChild(listItem);
+
+                // Clear the input field
+                taskInput.value = '';
+            } else {
+                alert('Please enter a task!');
+            }
+        }
+
+        // Add task on button click
+        document.getElementById('add-task-btn').addEventListener('click', addTask);
+
+        // Add task on pressing Enter key
+        taskInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        // Background Change Functionality
+        const changeBgBtn = document.getElementById('change-bg-btn');
+        const bgFileInput = document.getElementById('bg-file-input');
+
+        // Show file input when 'Change bg' button is clicked
+        changeBgBtn.addEventListener('click', () => {
+            bgFileInput.click();
+        });
+
+        // File selection event handler
+        bgFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.backgroundImage = `url('${e.target.result}')`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+
+                    // Load the image and apply color adjustments
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        context.drawImage(img, 0, 0, 1, 1);
+
+                        const [r, g, b] = context.getImageData(0, 0, 1, 1).data;
+
+                        // Set colors for header/footer and containers
+                        const darkerColor = `rgb(${Math.max(r - 30, 0)}, ${Math.max(g - 30, 0)}, ${Math.max(b - 30, 0)})`;
+                        const lightContainerColor = `rgb(${Math.min(r + 180, 255)}, ${Math.min(g + 180, 255)}, ${Math.min(b + 180, 255)})`;
+                        const darkerTextColor = `rgb(${Math.max(r - 70, 0)}, ${Math.max(g - 70, 0)}, ${Math.max(b - 70, 0)})`;
+                        const buttonColor = `rgb(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)})`;
+
+                        // Apply color to header and footer
+                        document.querySelector('header').style.backgroundColor = darkerColor;
+                        document.querySelector('footer').style.backgroundColor = darkerColor;
+                        document.querySelector('header').style.opacity = '0.8';
+                        document.querySelector('footer').style.opacity = '0.8';
+
+                        // Apply colors for containers
+                        document.getElementById('input-container').style.backgroundColor = lightContainerColor;
+                        document.getElementById('task-container').style.backgroundColor = lightContainerColor;
+
+                        // Apply text color to the container titles
+                        document.querySelector('#input-container h2').style.color = darkerTextColor;
+                        document.querySelector('#task-container h2').style.color = darkerTextColor;
+
+                        // Change 'Add Task' button color
+                        document.getElementById('add-task-btn').style.backgroundColor = buttonColor;
+                        document.getElementById('change-bg-btn').style.backgroundColor = buttonColor;
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+		
+
+    </script>
+</body>
+</html>
